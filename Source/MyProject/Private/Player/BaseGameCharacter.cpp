@@ -10,7 +10,7 @@
 #include <Components/TextRenderComponent.h>
 #include <Components/BaseWeaponComponent.h>
 #include <Components/CapsuleComponent.h>
-#include <CoreTypes.h>
+#include <BaseCoreTypes.h>
 #include <GameFramework/Controller.h>
 
 
