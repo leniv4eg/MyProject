@@ -1,6 +1,6 @@
 #pragma once
 
-#include <CoreTypes.generated.h>
+#include <BaseCoreTypes.generated.h>
 
 // Weapon
 
@@ -13,7 +13,7 @@ struct FAmmoData
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+		UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 		int32 Bullets;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (EditCondition = "!Infinite"))
@@ -31,8 +31,17 @@ struct FWeaponData
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 		TSubclassOf<ABaseWeapon> WeaponClass;
 
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	//	ABaseWeapon* WeaponClass;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 		UAnimMontage* ReloadAnimMontage;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+		UAnimMontage* EquipAnimMontageIn;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+		UAnimMontage* EquipAnimMontageOut;
 };
 
 //Health

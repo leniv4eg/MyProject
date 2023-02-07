@@ -51,7 +51,7 @@ void ABaseGameCharacter::BeginPlay()
 	check(HealthTextComponent);
 	check(ArmorTextComponent);
 	check(GetCharacterMovement());
-	check(WeaponComponent);
+	//check(WeaponComponent);
 
 	OnHealthChanged(HealthComponent->GetHealth());
 	OnArmorChanged(HealthComponent->GetArmor());

@@ -13,7 +13,9 @@ public:
 		{
 			auto AnimNotify = Cast<T>(NotifyEvent.Notify);
 			if (AnimNotify)
+			{
 				return AnimNotify;
+			}
 		}
 		return nullptr;
 	}

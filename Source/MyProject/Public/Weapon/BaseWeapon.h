@@ -26,6 +26,7 @@ public:
 	bool ReturnIsPistol() { return IsPistol; }
 	UAnimMontage* GetEquipAnimMontageIn() { return EquipAnimMontageIn; }
 	UAnimMontage* GetEquipAnimMontageOut() { return EquipAnimMontageOut; }
+	UAnimMontage* GetReloadAnimMontage() { return ReloadAnimMontage; }
 
 	void ChangeClip();
 	bool CanReload() const;
@@ -81,6 +82,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 		UAnimMontage* EquipAnimMontageOut;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+		UAnimMontage* ReloadAnimMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 		FAmmoData DefaultAmmo {	15, 10, false };

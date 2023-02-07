@@ -49,6 +49,7 @@ void UBaseWeaponComponent::SpawnWeapons()
 
 	for (auto OneWeaponData : WeaponData)
 	{
+		//auto Weapon = GetWorld()->SpawnActor<ABaseWeapon>(OneWeaponData.WeaponClass);
 		auto Weapon = GetWorld()->SpawnActor<ABaseWeapon>(OneWeaponData.WeaponClass);
 		if (!Weapon) continue;
 
@@ -110,11 +111,11 @@ void UBaseWeaponComponent::AttachWeaponToSocket(ABaseWeapon* Weapon, USceneCompo
 void UBaseWeaponComponent::EquipWeapon(int32 WeaponIndex)
 {
 	//Не даёт убрать всё оружие. Изменить логику!
-	if (WeaponIndex < 0 || WeaponIndex >= Weapons.Num())
+	/*if (WeaponIndex < 0 || WeaponIndex >= Weapons.Num())
 	{
 		UE_LOG(LogWeaponComponent, Warning, TEXT("Invalid weapon index"));
 		return;
-	}
+	}*/
 
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	if (!Character) return;
@@ -166,33 +167,33 @@ void UBaseWeaponComponent::EquipWeapon(int32 WeaponIndex)
 		PlayAnimMontage(CurrentWeapon->GetEquipAnimMontageIn());*/
 		EquipWeaponHelper(Character, WeaponIndex, WeaponFirstArmorySocketName);
 		break;
-
+	//
 	case 2:
 		if (CurrentWeapon)
 		{
-			if (CurrentWeaponIndex == 0)
-			{
-				auto WeaponSocketName = CurrentWeapon->ReturnIsPistol() ? WeaponPistolSocketName : WeaponFirstArmorySocketName;
-				AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponSocketName);
+			//if (CurrentWeaponIndex == 0)
+			//{
+				auto WeaponSocketName = CurrentWeapon->ReturnIsPistol() ? WeaponPistolSocketName : (CurrentWeaponIndex == 0 ? WeaponFirstArmorySocketName : WeaponSecondArmorySocketName);
 				EquipAnimInProgress = true;
-				//PlayAnimMontage(EquipAnimMontage);
 				PlayAnimMontage(CurrentWeapon->GetEquipAnimMontageOut());
-			}
-			else if (CurrentWeaponIndex == 1)
-			{
-				auto WeaponSocketName = CurrentWeapon->ReturnIsPistol() ? WeaponPistolSocketName : WeaponSecondArmorySocketName;
 				AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponSocketName);
-				EquipAnimInProgress = true;
-				//PlayAnimMontage(EquipAnimMontage);
-				PlayAnimMontage(CurrentWeapon->GetEquipAnimMontageOut());
-			}
+			//}
+			//else if (CurrentWeaponIndex == 1)
+			//{
+			//	auto WeaponSocketName = CurrentWeapon->ReturnIsPistol() ? WeaponPistolSocketName : WeaponSecondArmorySocketName;
+			//	EquipAnimInProgress = true;
+			//	//PlayAnimMontage(EquipAnimMontage);
+			//	PlayAnimMontage(CurrentWeapon->GetEquipAnimMontageOut());
+			//	AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponSocketName);
+			//}
 			CurrentWeapon = nullptr;
 			CurrentWeaponIndex = WeaponIndex;
-			//CurrentReloadAnimMontage = nullprt;
-			const auto CurrentWeaponData = WeaponData.FindByPredicate([&](const FWeaponData& Data) {
-				return Data.WeaponClass == CurrentWeapon->GetClass();
-				});
-			CurrentReloadAnimMontage = CurrentWeaponData ? CurrentWeaponData->ReloadAnimMontage : nullptr;
+			CurrentReloadAnimMontage = nullptr;
+			
+			//const auto CurrentWeaponData = WeaponData.FindByPredicate([&](const FWeaponData& Data) {
+			//	return Data.WeaponClass == CurrentWeapon->GetClass();
+			//	});
+			//CurrentReloadAnimMontage = CurrentWeaponData ? CurrentWeaponData->ReloadAnimMontage : nullptr;
 		}
 	}
 
@@ -206,26 +207,27 @@ void UBaseWeaponComponent::EquipWeapon(int32 WeaponIndex)
 void UBaseWeaponComponent::EquipWeaponHelper(ACharacter* Character, int32 WeaponIndex, FName SecondArmorySocketName)
 {
 	//Здесь сломана логика воспроизведения анимаций!!!
-	if (CurrentWeapon != nullptr)
+	if (CurrentWeapon)
 	{
 		CurrentWeapon->StopFire();
 		auto WeaponSocketName = CurrentWeapon->ReturnIsPistol() ? WeaponPistolSocketName : SecondArmorySocketName;
+		EquipAnimInProgress = true;
+		PlayAnimMontage(CurrentWeapon->GetEquipAnimMontageOut());
+		//PlayAnimMontage(CurrentEquioAnimMontageIn);
 		AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponSocketName);
-		//EquipAnimInProgress = true;
-		//PlayAnimMontage(EquipAnimMontage);
-		//PlayAnimMontage(CurrentWeapon->GetEquipAnimMontageOut());
 	}
 
 	CurrentWeapon = Weapons[WeaponIndex];
-	const auto CurrentWeaponData = WeaponData.FindByPredicate([&](const FWeaponData& Data) {
+	/*const auto CurrentWeaponData = WeaponData.FindByPredicate([&](const FWeaponData& Data) {
 		return Data.WeaponClass == CurrentWeapon->GetClass();
 		});
-	CurrentReloadAnimMontage = CurrentWeaponData ? CurrentWeaponData->ReloadAnimMontage : nullptr;
-
-	AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponEquipSocketName);
+	CurrentReloadAnimMontage = CurrentWeaponData ? CurrentWeaponData->ReloadAnimMontage : nullptr;*/
+	CurrentReloadAnimMontage = CurrentWeapon->GetReloadAnimMontage();
+	//CurrentEquioAnimMontageOut = CurrentWeapon->GetEquipAnimMontageOut();
 	EquipAnimInProgress = true;
 	PlayAnimMontage(CurrentWeapon->GetEquipAnimMontageIn());
-
+	//PlayAnimMontage(CurrentEquioAnimMontageOut);
+	AttachWeaponToSocket(CurrentWeapon, Character->GetMesh(), WeaponEquipSocketName);
 }
 
 void UBaseWeaponComponent::PlayAnimMontage(UAnimMontage* Animation)
@@ -238,7 +240,7 @@ void UBaseWeaponComponent::PlayAnimMontage(UAnimMontage* Animation)
 
 void UBaseWeaponComponent::InitAnimations()
 {
-	auto EquipFinishedNotify = AnimUtils::FindNotifyByClass<UEquipFinishedAnimNotify>(EquipAnimMontage);
+	/*auto EquipFinishedNotify = AnimUtils::FindNotifyByClass<UEquipFinishedAnimNotify>(EquipAnimMontage);
 	if (EquipFinishedNotify)
 	{
 		EquipFinishedNotify->OnNotified.AddUObject(this, &UBaseWeaponComponent::OnEquipFinished);
@@ -247,6 +249,31 @@ void UBaseWeaponComponent::InitAnimations()
 	{
 		UE_LOG(LogWeaponComponent, Error, TEXT("Equip anim notify is forgotten to set"));
 		checkNoEntry();
+	}*/
+
+	/*Надо как-то обратиться к WeaponClass, чтобы получить анимациb EquipAnimMontageIn и ReloadAnimMontage, а из структуры WeaponData их убрать*/
+	for (auto OneWeaponData : WeaponData)
+	{
+		auto EquipFinishedNotify = AnimUtils::FindNotifyByClass<UEquipFinishedAnimNotify>(OneWeaponData.EquipAnimMontageIn);
+		if (EquipFinishedNotify)
+		{
+			EquipFinishedNotify->OnNotified.AddUObject(this, &UBaseWeaponComponent::OnEquipFinished);
+		}
+		else
+		{
+			UE_LOG(LogWeaponComponent, Error, TEXT("Equip anim notify is forgotten to set"));
+			checkNoEntry();
+		}
+		//auto EquipFinishedNotify = AnimUtils::FindNotifyByClass<UEquipFinishedAnimNotify>(Cast<ABaseWeapon>(OneWeaponData.WeaponClass)->GetEquipAnimMontageOut());
+		//if (EquipFinishedNotify)
+		//{
+		//	EquipFinishedNotify->OnNotified.AddUObject(this, &UBaseWeaponComponent::OnEquipFinished);
+		//}
+		//else
+		//{
+		//	UE_LOG(LogWeaponComponent, Error, TEXT("Equip anim notify is forgotten to set"));
+		//	checkNoEntry();
+		//}
 	}
 
 	for (auto OneWeaponData : WeaponData)
@@ -289,7 +316,7 @@ bool UBaseWeaponComponent::CanEquip() const
 
 bool UBaseWeaponComponent::CanReload() const
 {
-	return CurrentWeapon && !EquipAnimInProgress && !ReloadAnimInProgress && CurrentWeapon->CanReload();
+	return CurrentWeapon && !EquipAnimInProgress && !ReloadAnimInProgress /* && CurrentWeapon->CanReload()*/;
 }
 
 void UBaseWeaponComponent::OnEmptyClip()
@@ -303,7 +330,8 @@ void UBaseWeaponComponent::ChangeClip()
 	CurrentWeapon->StopFire();
 	CurrentWeapon->ChangeClip();
 	ReloadAnimInProgress = true;
-	PlayAnimMontage(CurrentReloadAnimMontage);
+	//PlayAnimMontage(CurrentReloadAnimMontage);
+	PlayAnimMontage(CurrentWeapon->GetReloadAnimMontage());
 }
 
 void UBaseWeaponComponent::SetFirstWeapon()

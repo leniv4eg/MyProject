@@ -46,8 +46,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 		TArray<FWeaponData> WeaponData;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-		UAnimMontage* EquipAnimMontage;
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+		UAnimMontage* EquipAnimMontage;*/
 
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
@@ -59,6 +59,12 @@ private:
 	UPROPERTY()
 		TArray<ABaseWeapon*> Weapons;
 
+	UPROPERTY()
+		UAnimMontage* CurrentEquioAnimMontageIn = nullptr;
+	//
+	//UPROPERTY()
+	//	UAnimMontage* CurrentEquioAnimMontageOut = nullptr;
+	
 	UPROPERTY()
 		UAnimMontage* CurrentReloadAnimMontage = nullptr;
 

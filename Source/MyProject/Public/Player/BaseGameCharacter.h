@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include <CoreTypes.h>
+#include <BaseCoreTypes.h>
 #include "BaseGameCharacter.generated.h"
 
 class UCameraComponent;

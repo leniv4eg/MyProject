@@ -34,6 +34,9 @@ bool ABaseWeapon::GetTraceData(FVector& TraceStart, FVector& TraceEnd) const
 	FRotator ViewRotation;
 	if(!GetPlayerViewPoint(ViewLocation, ViewRotation)) return false;
 
+	/*ViewLocation = this->GetActorLocation();
+	ViewRotation = this->GetActorRotation();*/
+
 	TraceStart = ViewLocation;
 	const auto Spread = FMath::DegreesToRadians(BulletSpread);
 	const FVector ShootDirection = FMath::VRandCone(ViewRotation.Vector(), Spread);
@@ -65,6 +68,7 @@ void ABaseWeapon::MakeShot()
 	for (int32 i = 0; i < BulletInShot; i++)
 	{
 		FVector TraceStart, TraceEnd;
+		//Надо изменить логику, чтобы патрон летел по направлению положения оружия
 		if (!GetTraceData(TraceStart, TraceEnd)) 
 		{
 			StopFire();
