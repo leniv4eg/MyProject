@@ -17,7 +17,8 @@ public class MyProject : ModuleRules
 			"MyProject/Public/Components", 
 			"MyProject/Public/Damage",
 			"MyProject/Public/Weapon",
-            "MyProject/Public/Animations"
+            "MyProject/Public/Animations",
+            "MyProject/Public/UI"
         });
 
 		// Uncomment if you are using Slate UI

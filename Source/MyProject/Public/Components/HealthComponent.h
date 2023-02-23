@@ -19,8 +19,14 @@ public:
 	FOnHealChangedSignature OnHealChanged;
 	FOnArmorChangedSignature OnArmorChanged;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Health")
 		bool IsDead() const { return FMath::IsNearlyZero(Health); }
+
+	UFUNCTION(BlueprintCallable, Category = "Health")
+		float GetHealthPercent() const { return Health / MaxHealth; }
+
+	UFUNCTION(BlueprintCallable, Category = "Health")
+		float GetArmorPercent() const { return Armor / MaxArmor; }
 
 	float GetHealth() const { return Health; }
 

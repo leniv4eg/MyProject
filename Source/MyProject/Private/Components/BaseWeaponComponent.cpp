@@ -348,3 +348,23 @@ void UBaseWeaponComponent::SetNoneWeapon()
 {
 	SwitchWeapon(2);
 }
+
+bool UBaseWeaponComponent::GetCurrentWeaponUIData(FWeaponUIData& UIData) const
+{
+	if (CurrentWeapon)
+	{
+		UIData = CurrentWeapon->GetUIData();
+		return true;
+	}
+	return false;
+}
+
+bool UBaseWeaponComponent::GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const
+{
+	if (CurrentWeapon)
+	{
+		AmmoData = CurrentWeapon->GetAmmoData();
+		return true;
+	}
+	return false;
+}

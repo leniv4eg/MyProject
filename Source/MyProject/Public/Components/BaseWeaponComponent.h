@@ -28,6 +28,9 @@ public:
 	void SetSecondWeapon();
 	void SetNoneWeapon();
 
+	bool GetCurrentWeaponUIData(FWeaponUIData& UIData) const;
+	bool GetCurrentWeaponAmmoData(FAmmoData& AmmoData) const;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 		FName WeaponEquipSocketName = "weaponSocket";

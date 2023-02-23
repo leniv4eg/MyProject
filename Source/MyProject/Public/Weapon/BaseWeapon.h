@@ -28,6 +28,10 @@ public:
 	UAnimMontage* GetEquipAnimMontageOut() { return EquipAnimMontageOut; }
 	UAnimMontage* GetReloadAnimMontage() { return ReloadAnimMontage; }
 
+	FWeaponUIData GetUIData() const { return UIData; }
+
+	FAmmoData GetAmmoData() const { return CurrentAmmo; }
+
 	void ChangeClip();
 	bool CanReload() const;
 
@@ -88,6 +92,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 		FAmmoData DefaultAmmo {	15, 10, false };
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+		FWeaponUIData UIData;
 
 	virtual void BeginPlay() override;
 	virtual bool GetTraceData(FVector& TraceStart, FVector& TraceEnd) const;
